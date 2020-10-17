@@ -12,6 +12,7 @@ import AddPlacePopup from "./AddPlacePopup";
 import RemovePlacePopup from "./RemovePlacePopup";
 import Register from "./Register";
 import Login from "./Login";
+import InfoTooltip from "./InfoTooltip";
 
 function App() {
 
@@ -24,6 +25,8 @@ function App() {
   const [cards, setCards] = useState([]);
   const [removingCard, setRemovingCard] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const errorHandler = err => {
     console.log(err);
@@ -62,6 +65,11 @@ function App() {
     setSelectedCard(card);
   }
 
+  function openInfoTooltip(state) {
+    setIsTooltipOpen(true);
+    setSuccess(state);
+  }
+
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
     api.changeLikeCardStatus(card._id, !isLiked)
@@ -93,6 +101,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsRemovePopupOpen(false);
     setSelectedCard('');
+    setIsTooltipOpen(false);
   }
 
   function handleUpdateUser(data) {
@@ -128,6 +137,12 @@ function App() {
       <div className="page__content">
         <Header/>
 
+        {/*<InfoTooltip*/}
+        {/*  isOpen={isTooltipOpen}*/}
+        {/*  success={success}*/}
+        {/*  onClose={closeAllPopups}*/}
+        {/*/>*/}
+
         <Switch>
           <Register path={'/sign-up'} />
           <Login path={'/sign-in'} />
@@ -142,9 +157,6 @@ function App() {
           onCardLike={handleCardLike}
           onCardDelete={handleRemovePopup}
         />
-
-        {/*<Register/>*/}
-        {/*<Login/>*/}
 
         <Footer/>
         <EditProfilePopup
