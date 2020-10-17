@@ -10,6 +10,7 @@ function Register() {
           className="auth__input auth__input_email"
           type="email"
           id="email-input"
+          placeholder="Email"
           // defaultValue={name}
           // onChange={handleEmail}
           name="authEmailInput"
@@ -27,6 +28,7 @@ function Register() {
           className="auth__input auth__input_password"
           type="password"
           id="password-input"
+          placeholder="Пароль"
           // defaultValue={description}
           // onChange={handleDescription}
           name="authPasswordInput"
@@ -44,7 +46,7 @@ function Register() {
       >Зарегистрироваться</button>
       <Link
         to="/sign-in"
-        className="auth_link"
+        className="auth__link"
       >Уже зарегистрированы? Войти</Link>
     </form>
   )
