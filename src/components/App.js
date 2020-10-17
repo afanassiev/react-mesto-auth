@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import {Route, Redirect, Switch} from 'react-router-dom';
 import Header from "./Header";
 import Footer from "./Footer";
 import Main from "./Main";
@@ -20,6 +21,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState('');
   const [cards, setCards] = useState([]);
   const [removingCard, setRemovingCard] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const errorHandler = err => {
     console.log(err);
@@ -123,6 +125,12 @@ function App() {
     <div className="App">
       <div className="page__content">
         <Header/>
+
+        <Switch>
+          <Route path={'/sign-up'} />
+          <Login path={'/sign-in'} />
+        </Switch>
+
         <Main
           cards={cards}
           onEditAvatar={handleEditAvatarClick}
