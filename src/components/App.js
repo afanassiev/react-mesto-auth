@@ -10,6 +10,8 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import RemovePlacePopup from "./RemovePlacePopup";
+import Register from "./Register";
+import Login from "./Login";
 
 function App() {
 
@@ -127,7 +129,7 @@ function App() {
         <Header/>
 
         <Switch>
-          <Route path={'/sign-up'} />
+          <Register path={'/sign-up'} />
           <Login path={'/sign-in'} />
         </Switch>
 
@@ -140,6 +142,10 @@ function App() {
           onCardLike={handleCardLike}
           onCardDelete={handleRemovePopup}
         />
+
+        {/*<Register/>*/}
+        {/*<Login/>*/}
+
         <Footer/>
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
