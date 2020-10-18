@@ -12,6 +12,8 @@ function Login({loginUser}) {
     evt.preventDefault()
     if (email || password) {
       loginUser(email, password)
+    } else {
+
     }
   }
 

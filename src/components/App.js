@@ -141,9 +141,9 @@ function App() {
         registerConfirm(true);
         history.push('/sign-in');
       })
-      .catch((error) => {
+      .catch((err) => {
         registerConfirm(false);
-        errorHandler(error);
+        errorHandler(err);
       })
   }
 
@@ -156,14 +156,7 @@ function App() {
           setIsLoggedIn(true);
           history.push('/');
         }})
-        .catch(error => {
-          if (error === 401) {
-            console.log('Токен не передан или передан не в том формате');
-          }
-          if (error === 401) {
-            console.log('Переданный токен некорректен')
-          }
-        })
+        .catch(errorHandler)
     }
   }
 
@@ -175,7 +168,7 @@ function App() {
           tokenCheck();
         }
       })
-      .catch(errorHandler);
+      .catch(errorHandler)
   }
 
   function signOut() {
@@ -189,15 +182,9 @@ function App() {
     <div className="App">
       <div className="page__content">
         <Header
-          signOut={signOut} // todo: допилить
+          signOut={signOut}
           loggedInUserEmail={loggedInUserEmail}
         />
-
-        {/*<InfoTooltip*/}
-        {/*  isOpen={isTooltipOpen}*/}
-        {/*  success={success}*/}
-        {/*  onClose={closeAllPopups}*/}
-        {/*/>*/}
 
         <Switch>
           <ProtectedRoute
@@ -222,6 +209,11 @@ function App() {
 
 
         <Footer/>
+        <InfoTooltip
+          isOpen={isTooltipOpen}
+          success={success}
+          onClose={closeAllPopups}
+        />
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}

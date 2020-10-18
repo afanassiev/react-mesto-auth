@@ -2,9 +2,9 @@ import React from "react";
 import Success from "../images/success.svg";
 import Failure from "../images/failure.svg";
 
-function InfoTooltip({success, onClose}) {
+function InfoTooltip({success, isOpen, onClose}) {
   return (
-    <div className="popup popup_opened">
+    <div className={`popup ${isOpen ? 'popup_opened' : ''}`}>
       <div className="popup__container">
         <div className="info-tooltip">
           <img src={`${success ? Success : Failure}`} alt="Результат авторизации"/>
