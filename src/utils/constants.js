@@ -6,3 +6,11 @@ export const apiConfig = {
     'Content-Type': 'application/json'
   }
 }
+
+export const apiAuthConfig = {
+  baseUrl: 'https://auth.nomoreparties.co',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
+}
