@@ -181,7 +181,7 @@ function App() {
   function signOut() {
     setIsLoggedIn(false);
     localStorage.removeItem('jwt');
-    history.push('/login');
+    history.push('/sign-in');
   }
 
   return (
@@ -190,6 +190,7 @@ function App() {
       <div className="page__content">
         <Header
           signOut={signOut} // todo: допилить
+          loggedInUserEmail={loggedInUserEmail}
         />
 
         {/*<InfoTooltip*/}
