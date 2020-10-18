@@ -13,6 +13,7 @@ import RemovePlacePopup from "./RemovePlacePopup";
 import Register from "./Register";
 import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
 
@@ -144,19 +145,26 @@ function App() {
         {/*/>*/}
 
         <Switch>
-          <Register path={'/sign-up'} />
-          <Login path={'/sign-in'} />
+          <ProtectedRoute
+            exact path="/"
+            component={Main}
+            loggedIn={isLoggedIn}
+            cards={cards}
+            onEditAvatar={handleEditAvatarClick}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onCardClick={handleCardClick}
+            onCardLike={handleCardLike}
+            onCardDelete={handleRemovePopup}
+          />
+          <Route path={'/sign-up'}>
+            <Register />
+          </Route>
+          <Route path={'/sign-in'} >
+            <Login />
+          </Route>
         </Switch>
 
-        <Main
-          cards={cards}
-          onEditAvatar={handleEditAvatarClick}
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleRemovePopup}
-        />
 
         <Footer/>
         <EditProfilePopup
