@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {Route, Redirect, Switch} from 'react-router-dom';
+import {Route, Redirect, Switch, useHistory} from 'react-router-dom';
 import Header from "./Header";
 import Footer from "./Footer";
 import Main from "./Main";
@@ -14,9 +14,11 @@ import Register from "./Register";
 import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
 import ProtectedRoute from "./ProtectedRoute";
+import auth from "../utils/auth";
 
 function App() {
 
+  const history = useHistory();
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
@@ -28,6 +30,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [loggedInUserEmail, setLoggedInUserEmail] = useState('');
 
   const errorHandler = err => {
     console.log(err);
@@ -66,7 +69,7 @@ function App() {
     setSelectedCard(card);
   }
 
-  function openInfoTooltip(state) {
+  function registerConfirm(state) {
     setIsTooltipOpen(true);
     setSuccess(state);
   }
@@ -132,11 +135,62 @@ function App() {
       .catch(errorHandler)
   }
 
+  function registerUser(email, password) {
+    return auth.register(email, password)
+      .then(() => {
+        registerConfirm(true);
+        history.push('/sign-in');
+      })
+      .catch((error) => {
+        registerConfirm(false);
+        errorHandler(error);
+      })
+  }
+
+  function tokenCheck() {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      auth.getContent(jwt).then(res => {
+        if (res) {
+          setLoggedInUserEmail(res.data.email);
+          setIsLoggedIn(true);
+          history.push('/');
+        }})
+        .catch(error => {
+          if (error === 401) {
+            console.log('Токен не передан или передан не в том формате');
+          }
+          if (error === 401) {
+            console.log('Переданный токен некорректен')
+          }
+        })
+    }
+  }
+
+  function loginUser(email, password) {
+    return auth.authorize(email, password)
+      .then(res => {
+        if (res && res.token) {
+          localStorage.setItem('jwt', res.token);
+          tokenCheck();
+        }
+      })
+      .catch(errorHandler);
+  }
+
+  function signOut() {
+    setIsLoggedIn(false);
+    localStorage.removeItem('jwt');
+    history.push('/login');
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
     <div className="App">
       <div className="page__content">
-        <Header/>
+        <Header
+          signOut={signOut} // todo: допилить
+        />
 
         {/*<InfoTooltip*/}
         {/*  isOpen={isTooltipOpen}*/}
@@ -158,10 +212,10 @@ function App() {
             onCardDelete={handleRemovePopup}
           />
           <Route path={'/sign-up'}>
-            <Register />
+            <Register registerUser={registerUser} />
           </Route>
           <Route path={'/sign-in'} >
-            <Login />
+            <Login loginUser={loginUser} />
           </Route>
         </Switch>
 

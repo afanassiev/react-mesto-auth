@@ -1,9 +1,25 @@
-import React from "react";
+import React, {useState} from "react";
 import {Link} from "react-router-dom";
 
-function Register() {
+function Register({registerUser}) {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const onChangeEmail = (evt) => setEmail(evt.target.value);
+  const onChangePassword = (evt) => setPassword(evt.target.value);
+
+  function handleSubmit(evt) {
+    evt.preventDefault()
+    if (email || password) {
+      registerUser(email, password)
+    }
+  }
+
   return (
-    <form className="auth">
+    <form
+      className="auth"
+      onSubmit={handleSubmit}
+    >
       <h2 className="auth__header">Регистрация</h2>
       <label className="auth__label">
         <input
@@ -11,10 +27,10 @@ function Register() {
           type="email"
           id="email-input"
           placeholder="Email"
-          // defaultValue={name}
-          // onChange={handleEmail}
           name="authEmailInput"
           required
+          value={email || ''}
+          onChange={onChangeEmail}
           minLength="2"
           maxLength="40"
         />
@@ -29,9 +45,9 @@ function Register() {
           type="password"
           id="password-input"
           placeholder="Пароль"
-          // defaultValue={description}
-          // onChange={handleDescription}
           name="authPasswordInput"
+          value={password || ''}
+          onChange={onChangePassword}
           required minLength="2"
           maxLength="20"
         />
