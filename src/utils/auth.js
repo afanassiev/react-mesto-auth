@@ -6,6 +6,13 @@ class Auth {
     this.headers = authConfig.headers
   }
 
+  _resultHandler(res) {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(res.status)
+  }
+
   register(email, password) {
     return fetch(`${this.url}/signup`,
       {
@@ -13,16 +20,7 @@ class Auth {
         headers: this.headers,
         body: JSON.stringify({password, email})
       })
-      // .then(this._resultHandler)
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        if (res.status === 400) {
-          console.log('Некорректно заполнено одно из полей');
-        }
-        return Promise.reject(`Ошибка: ${res.status}`)
-      })
+      .then(this._resultHandler)
   }
 
   authorize(email, password) {
@@ -32,19 +30,7 @@ class Auth {
         headers: this.headers,
         body: JSON.stringify({password, email})
       })
-      // .then(this._resultHandler)
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        if (res.status === 400) {
-          console.log('Не передано одно из полей');
-        }
-        if (res.status === 401) {
-          console.log('Пользователь с таким email не найден');
-        }
-        return Promise.reject(`Ошибка: ${res.status}`)
-      })
+      .then(this._resultHandler)
   }
 
   getContent(token) {
@@ -57,19 +43,8 @@ class Auth {
           'Authorization': `Bearer ${token}`,
         }
       })
-      // .then(this._resultHandler)
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        if (res.status === 400) {
-          console.log('Токен не передан или передан не в том формате');
-        }
-        if (res.status === 401) {
-          console.log('Переданный токен некорректен')
-        }
-        return Promise.reject(`Ошибка: ${res.status}`)
-  })}
+      .then(this._resultHandler)
+  }
 }
 
 const auth = new Auth(apiAuthConfig);

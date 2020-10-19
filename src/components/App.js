@@ -32,6 +32,10 @@ function App() {
   const [success, setSuccess] = useState(false);
   const [loggedInUserEmail, setLoggedInUserEmail] = useState('');
 
+  useEffect(() => {
+    tokenCheck();
+  }, []);
+
   const errorHandler = err => {
     console.log(err);
   }
@@ -141,8 +145,11 @@ function App() {
         registerConfirm(true);
         history.push('/sign-in');
       })
-      .catch((err) => {
+      .catch(err => {
         registerConfirm(false);
+        if (err === 400) {
+          console.log('Некорректно заполнено одно из полей');
+        }
         errorHandler(err);
       })
   }
@@ -156,7 +163,15 @@ function App() {
           setIsLoggedIn(true);
           history.push('/');
         }})
-        .catch(errorHandler)
+        .catch(err => {
+          if (err === 400) {
+            console.log('Токен не передан или передан не в том формате');
+          }
+          if (err === 401) {
+            console.log('Переданный токен некорректен')
+          }
+          errorHandler(err);
+        })
     }
   }
 
@@ -168,7 +183,15 @@ function App() {
           tokenCheck();
         }
       })
-      .catch(errorHandler)
+      .catch(err => {
+        if (err === 400) {
+          console.log('Не передано одно из полей');
+        }
+        if (err === 401) {
+          console.log('Пользователь с такой комбинацией email и пароля не найден');
+        }
+        errorHandler(err);
+      })
   }
 
   function signOut() {
